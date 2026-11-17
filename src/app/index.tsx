@@ -8,6 +8,11 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { WebBadge } from '@/components/web-badge';
 import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+import { View, Text } from 'react-native';
+import { Color } from 'expo-router';
+import { SearchBar } from 'react-native-screens';
+import { services } from '../../constants/services';
+
 
 function getDevMenuHint() {
   if (Platform.OS === 'web') {
@@ -32,30 +37,52 @@ export default function HomeScreen() {
   return (
     <ThemedView style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
-          </ThemedText>
-        </ThemedView>
+        <View style={styles.heroSection}>
+          <Text style={styles.title} className='flex text-2xl font-bold'>All your services in one place</Text>
+        </View>
+        <View style={styles.searchBar} className='mx-5 flex items-center justify-center border-1 rounded-2xl h-10 w-100'>
+          <Text className=' text-indigo-950'>Search for a service</Text>
+        </View>
+        <View className="flex-row m-5 justify-between items-center bg-indigo-950 rounded-2xl w-100 mx-5 p-5">
 
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
+          <View className="flex-1 pr-2">
+            <Text className="text-white text-xl font-bold">
+              Smart Home Repair & Service Platform
+            </Text>
 
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
-          />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
+            <Text className="text-white text-xs mt-3">
+              Find trusted professionals for your home repair needs.
+            </Text>
+          </View>
 
-        {Platform.OS === 'web' && <WebBadge />}
+
+          <View className="w-24 h-28 items-center justify-center">
+            <Text className="text-white">Image</Text>
+          </View>
+        </View>
+        <View className='flex-row justify-between'>
+          <Text>What need fixing?</Text>
+          <Text>See all</Text>
+        </View>
+        
+         <View className="flex-row flex-wrap gap-2 m-5">
+  {services.map((service) => (
+    <View
+      key={service}
+      className="w-25 h-25 justify-center bg-purple-100 rounded-xl p-3 items-center"
+    >
+      <Text className="text-xs text-center">
+        {service}
+      </Text>
+    </View>
+  ))}
+</View>
+       <View className='flex-row p-5 w-100 h-30 mx-5  bg-indigo-950 rounded-2xl  justify-center items-center'>
+       <View className='w-20 items-center justify-center'><Text className='text-white'>image</Text></View>
+          <View className='flex-1'><Text className='text-white'>Verified Technicians Trusted & Professional</Text></View>
+            <View className='w-20 items-center justify-center'><Text className='text-white'>image</Text></View>
+        </View> 
+
       </SafeAreaView>
     </ThemedView>
   );
@@ -63,36 +90,36 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
+    display: 'flex',
+    color: '#171466',
     flexDirection: 'row',
+    margin: Spacing.two,
   },
   safeArea: {
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
+    display: 'flex',
   },
   heroSection: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
+    display: 'flex',
+    margin: 20
   },
   title: {
-    textAlign: 'center',
+
+    color: '#171466',
+    fontFamily: 'bold'
   },
-  code: {
-    textTransform: 'uppercase',
+  searchBar: {
+    display: 'flex',
+    borderRadius: 10,
+    borderStyle: 'solid',
+    color: '#171466',
+    fontSize: 6
   },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
+  box: {
+    display: 'flex',
+    backgroundColor: '#171466',
+    height: 100,
+
+
+    borderRadius: Spacing.three,
   },
 });
