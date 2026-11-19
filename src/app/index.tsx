@@ -1,125 +1,128 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
-import { View, Text } from 'react-native';
-import { Color } from 'expo-router';
-import { SearchBar } from 'react-native-screens';
-import { services } from '../../constants/services';
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { services } from "../../constants/services";
+import { useRouter} from "expo-router";
 
 
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
+const Home = () => {
+  const navigate=useRouter()
+  const handlePress=()=>{
+    navigate.navigate('/user')
   }
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
-    );
-  }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
   return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
-  );
-}
-
-export default function HomeScreen() {
-  return (
-    <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <View style={styles.heroSection}>
-          <Text style={styles.title} className='flex text-2xl font-bold'>All your services in one place</Text>
+    <SafeAreaView>
+      <View style={styles.container}>
+        <Text style={styles.title}>All your service in one place</Text>
+      </View>
+      <View style={styles.searchBar} className=" border-1 border-indigo-950">
+        <Text style={styles.search}>Search for a service</Text>
+      </View>
+      <View style={styles.box}>
+        <View className="flex-1">
+          <Text style={styles.box1Text}>Smart Home Repair & Service Platform</Text>
+          <Text style={styles.box1Text2}>Find trusted professionals for your home repair needs.</Text>
         </View>
-        <View style={styles.searchBar} className='mx-5 flex items-center justify-center border-1 rounded-2xl h-10 w-100'>
-          <Text className=' text-indigo-950'>Search for a service</Text>
+        <View >
+          <Text className="w-30 h-20">image</Text>
         </View>
-        <View className="flex-row m-5 justify-between items-center bg-indigo-950 rounded-2xl w-100 mx-5 p-5">
-
-          <View className="flex-1 pr-2">
-            <Text className="text-white text-xl font-bold">
-              Smart Home Repair & Service Platform
-            </Text>
-
-            <Text className="text-white text-xs mt-3">
-              Find trusted professionals for your home repair needs.
-            </Text>
-          </View>
-
-
-          <View className="w-24 h-28 items-center justify-center">
-            <Text className="text-white">Image</Text>
-          </View>
-        </View>
-        <View className='flex-row justify-between'>
-          <Text>What need fixing?</Text>
-          <Text>See all</Text>
-        </View>
+      </View>
+      <View style={styles.box2}>
+        <Text className="text-indigo-950">What needs fixing?</Text>
+        <Text className="text-indigo-950">See all</Text>
+      </View>
+      <View style={styles.services}>
+        {
+          services.map((service) => (
         
-         <View className="flex-row flex-wrap gap-2 m-5">
-  {services.map((service) => (
-    <View
-      key={service}
-      className="w-25 h-25 justify-center bg-purple-100 rounded-xl p-3 items-center"
-    >
-      <Text className="text-xs text-center">
-        {service}
-      </Text>
-    </View>
-  ))}
-</View>
-       <View className='flex-row p-5 w-100 h-30 mx-5  bg-indigo-950 rounded-2xl  justify-center items-center'>
-       <View className='w-20 items-center justify-center'><Text className='text-white'>image</Text></View>
-          <View className='flex-1'><Text className='text-white'>Verified Technicians Trusted & Professional</Text></View>
-            <View className='w-20 items-center justify-center'><Text className='text-white'>image</Text></View>
-        </View> 
-
-      </SafeAreaView>
-    </ThemedView>
+             <View key={service} style={styles.list}  ><TouchableOpacity onPress={()=>handlePress()}><Text>{service}</Text></TouchableOpacity></View>
+        ))}
+      </View>
+      <View style={styles.box3}>
+        <Text className="text-white">image</Text>
+        <Text className=" w-60 text-white">Verified Technicians Trusted & Professional</Text>
+        <Text className="text-white">image</Text>
+      </View>
+    </SafeAreaView>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
-    color: '#171466',
-    flexDirection: 'row',
-    margin: Spacing.two,
-  },
-  safeArea: {
-    display: 'flex',
-  },
-  heroSection: {
-    display: 'flex',
-    margin: 20
+    margin: 20,
+    paddingTop:20
   },
   title: {
-
-    color: '#171466',
-    fontFamily: 'bold'
+    color: '#141F66',
+    fontWeight: 'bold',
+    fontSize: 25
   },
   searchBar: {
     display: 'flex',
+    outline: " 1px solid black",
     borderRadius: 10,
-    borderStyle: 'solid',
-    color: '#171466',
-    fontSize: 6
+    padding: 10,
+    margin: 20,
+    width:'100px'
+  },
+  search: {
+    fontSize: 15,
+    color: '#141F66'
   },
   box: {
+    backgroundColor: '#141F66',
+    margin: 20,
+    padding: 15,
     display: 'flex',
-    backgroundColor: '#171466',
-    height: 100,
-
-
-    borderRadius: Spacing.three,
+    flexDirection: 'row',
+    borderRadius:10,
+    width:'100px'
   },
-});
+  box1Text: {
+    color: 'white',
+    fontSize:25
+  },
+  box1Text2: {
+    color: 'white',
+    fontSize:15
+  },
+  box2: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent:'space-between',
+    margin:20
+  },
+  services: {
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    margin:10,
+    padding:10,
+    gap:15
+  },
+  list: {
+    display:'flex',
+    alignItems:'center',
+    justifyContent:'center',
+    width:85,
+    backgroundColor:'#E0DFFB',
+    cursor:'pointer',
+    height: 80,
+    borderRadius:10,
+    
+  },
+  box3:{
+    display:'flex',
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'center',
+    backgroundColor:'#141F66',
+    borderRadius:10,
+    width:'100px',
+    margin:20,
+    padding:40,
+    gap:10
+  }
+
+})
+export default Home;
+
