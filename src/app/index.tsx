@@ -27,23 +27,21 @@ const Home = () => {
 
 
 
-  const handleValues = (property:string, value:string) => {
-
+  const handleValues = (property: string, value: string) => {
     setUserCredentials((prev) => ({ ...prev, [property]: value }))
-
   }
 
 
   const navigator = useNavigation<any>()
-  const signIn = async () => {
 
+  const signIn = async () => {
+    //handle empty credential
     if (!userCredentials.email || !userCredentials.password) {
       return
     }
 
-
+    //handle login flow
     try {
-
       const responce = await signInWithEmailAndPassword(
         auth,
         userCredentials.email.trim(),
@@ -59,15 +57,12 @@ const Home = () => {
       console.log(err)
     }
 
-
   }
 
   const handleLogin = () => {
     Keyboard.dismiss();
     signIn()
-
-
-  };
+  }
 
 
 
