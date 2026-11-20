@@ -1,128 +1,211 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { services } from "../../constants/services";
-import { useRouter} from "expo-router";
+import { useNavigation } from "expo-router";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { useState } from "react";
 
+import {
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { auth } from '../services/firebase';
 
 const Home = () => {
-  const navigate=useRouter()
-  const handlePress=()=>{
-    navigate.navigate('/user')
+
+
+  const [userCredentials, setUserCredentials] = useState({
+    email: '',
+    password: ''
+  })
+
+
+
+  const handleValues = (property:string, value:string) => {
+
+    setUserCredentials((prev) => ({ ...prev, [property]: value }))
+
   }
+
+
+  const navigator = useNavigation<any>()
+  const signIn = async () => {
+
+    if (!userCredentials.email || !userCredentials.password) {
+      return
+    }
+
+
+    try {
+
+      const responce = await signInWithEmailAndPassword(
+        auth,
+        userCredentials.email.trim(),
+        userCredentials.password
+      )
+      const user = responce.user
+
+      console.log(user)
+
+      navigator.navigate("(tabs)")
+
+    } catch (err) {
+      console.log(err)
+    }
+
+
+  }
+
+  const handleLogin = () => {
+    Keyboard.dismiss();
+    signIn()
+
+
+  };
+
+
+
   return (
-    <SafeAreaView>
-      <View style={styles.container}>
-        <Text style={styles.title}>All your service in one place</Text>
-      </View>
-      <View style={styles.searchBar} className=" border-1 border-indigo-950">
-        <Text style={styles.search}>Search for a service</Text>
-      </View>
-      <View style={styles.box}>
-        <View className="flex-1">
-          <Text style={styles.box1Text}>Smart Home Repair & Service Platform</Text>
-          <Text style={styles.box1Text2}>Find trusted professionals for your home repair needs.</Text>
-        </View>
-        <View >
-          <Text className="w-30 h-20">image</Text>
-        </View>
-      </View>
-      <View style={styles.box2}>
-        <Text className="text-indigo-950">What needs fixing?</Text>
-        <Text className="text-indigo-950">See all</Text>
-      </View>
-      <View style={styles.services}>
-        {
-          services.map((service) => (
-        
-             <View key={service} style={styles.list}  ><TouchableOpacity onPress={()=>handlePress()}><Text>{service}</Text></TouchableOpacity></View>
-        ))}
-      </View>
-      <View style={styles.box3}>
-        <Text className="text-white">image</Text>
-        <Text className=" w-60 text-white">Verified Technicians Trusted & Professional</Text>
-        <Text className="text-white">image</Text>
-      </View>
+    <SafeAreaView style={styles.safeArea} edges={["top", "bottom"]}>
+      <KeyboardAvoidingView
+        style={styles.keyboardAvoidingView}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 12 : 0}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+          <ScrollView
+            contentContainerStyle={styles.scrollContent}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+
+          >
+            <View style={styles.header}>
+              <Text style={styles.title}>Welcome Back</Text>
+              <Text style={styles.subtitle}>Let&apos;s find out your services</Text>
+            </View>
+
+            <View style={styles.form}>
+              <View style={styles.fieldGroup}>
+                <Text style={styles.label}>E-Mail Address</Text>
+                <TextInput
+                  style={styles.input}
+                  value={userCredentials.email}
+                  onChangeText={(value) => handleValues('email', value)}
+                  placeholder="you@example.com"
+                  placeholderTextColor="#94A3B8"
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  textContentType="emailAddress"
+                  returnKeyType="next"
+                />
+              </View>
+
+              <View style={styles.fieldGroup}>
+                <Text style={styles.label}>Enter Password</Text>
+                <TextInput
+                  style={styles.input}
+                  value={userCredentials.password}
+                  onChangeText={(value) => handleValues('password', value)}
+                  placeholder="••••••••"
+                  placeholderTextColor="#94A3B8"
+                  secureTextEntry
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  textContentType="password"
+                  returnKeyType="done"
+                  onSubmitEditing={handleLogin}
+                />
+              </View>
+
+              <Pressable
+                style={({ pressed }) => [
+                  styles.button,
+                  pressed && styles.buttonPressed,
+                ]}
+                onPress={handleLogin}
+              >
+                <Text style={styles.buttonText}>Sign In</Text>
+              </Pressable>
+            </View>
+          </ScrollView>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
-}
+};
+
 const styles = StyleSheet.create({
-  container: {
-    display: 'flex',
-    margin: 20,
-    paddingTop:20
+  safeArea: {
+    flex: 1,
+    backgroundColor: "#F8FAFC",
+  },
+  keyboardAvoidingView: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    justifyContent: "center",
+    paddingHorizontal: 24,
+    paddingVertical: 32,
+  },
+  header: {
+    marginBottom: 32,
   },
   title: {
-    color: '#141F66',
-    fontWeight: 'bold',
-    fontSize: 25
+    fontSize: 28,
+    fontWeight: "700",
+    color: "#0F172A",
+    marginBottom: 8,
   },
-  searchBar: {
-    display: 'flex',
-    outline: " 1px solid black",
-    borderRadius: 10,
-    padding: 10,
-    margin: 20,
-    width:'100px'
+  subtitle: {
+    fontSize: 16,
+    color: "#475569",
+    lineHeight: 22,
   },
-  search: {
-    fontSize: 15,
-    color: '#141F66'
+  form: {
+    gap: 20,
   },
-  box: {
-    backgroundColor: '#141F66',
-    margin: 20,
-    padding: 15,
-    display: 'flex',
-    flexDirection: 'row',
-    borderRadius:10,
-    width:'100px'
+  fieldGroup: {
+    gap: 8,
   },
-  box1Text: {
-    color: 'white',
-    fontSize:25
+  label: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#1E293B",
   },
-  box1Text2: {
-    color: 'white',
-    fontSize:15
+  input: {
+    height: 50,
+    backgroundColor: "#FFFFFF",
+    borderWidth: 1,
+    borderColor: "#CBD5E1",
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    fontSize: 16,
+    color: "#0F172A",
   },
-  box2: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent:'space-between',
-    margin:20
+  button: {
+    marginTop: 8,
+    height: 52,
+    backgroundColor: "#2563EB",
+    borderRadius: 12,
+    alignItems: "center",
+    justifyContent: "center",
   },
-  services: {
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    margin:10,
-    padding:10,
-    gap:15
+  buttonPressed: {
+    opacity: 0.88,
   },
-  list: {
-    display:'flex',
-    alignItems:'center',
-    justifyContent:'center',
-    width:85,
-    backgroundColor:'#E0DFFB',
-    cursor:'pointer',
-    height: 80,
-    borderRadius:10,
-    
+  buttonText: {
+    color: "#FFFFFF",
+    fontSize: 16,
+    fontWeight: "600",
   },
-  box3:{
-    display:'flex',
-    flexDirection:'row',
-    alignItems:'center',
-    justifyContent:'center',
-    backgroundColor:'#141F66',
-    borderRadius:10,
-    width:'100px',
-    margin:20,
-    padding:40,
-    gap:10
-  }
+});
 
-})
 export default Home;
-
