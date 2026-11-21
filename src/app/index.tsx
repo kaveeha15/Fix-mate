@@ -1,4 +1,4 @@
-import { useNavigation } from "expo-router";
+import { useNavigation,Link } from "expo-router";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
 
@@ -11,6 +11,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   TouchableWithoutFeedback,
   View,
 } from "react-native";
@@ -68,8 +69,6 @@ const Home = () => {
 
 
   };
-
-
 
   return (
     <SafeAreaView style={styles.safeArea} edges={["top", "bottom"]}>
@@ -133,6 +132,7 @@ const Home = () => {
               >
                 <Text style={styles.buttonText}>Sign In</Text>
               </Pressable>
+              <View> <Text>Don't have an account? <Link href="/signUp"><TouchableOpacity className="text-blue-700"><Text>SignUp</Text></TouchableOpacity></Link></Text></View>
             </View>
           </ScrollView>
         </TouchableWithoutFeedback>
