@@ -1,29 +1,36 @@
-import {auth} from '../services/firebase'
+
+import { auth } from '@/services/firebase'
 import { Stack, useRouter } from 'expo-router'
-import { useState,useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 const AuthStack = () => {
-//   const [user,setUser]=useState(null)
-//   const router=useRouter()
-// useEffect(()=>{
-//   const unsub=auth.onAuthStateChanged((us)=>{
-//     setUser(us)
-//   })
-//   return unsub
-// },[])
-// useEffect(()=>{
-//   if(user){
-//     router.replace('/(tabs)')
-//   }else{
-//     router.replace('/')
-//   }
-// },[user])
+
+  const [firebaseUser, setFirebaseUser] = useState(null)
+  const router = useRouter()
+
+  useEffect(() => {
+
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setFirebaseUser(user)
+    })
+    //cleanup subscriptiom
+    return unsubscribe
+
+  }, [])
+
+  useEffect(() => {
+    if (firebaseUser) router.replace('/(tabs)')
+    else if (!firebaseUser) router.replace('/')
+  }, [firebaseUser])
+
+
 
   return (
-   <Stack screenOptions={{headerShown:false}}>
-    <Stack.Screen name='index'/>
-     <Stack.Screen name='(tabs)'/>
-   </Stack>
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen name='index' />
+      <Stack.Screen name='(tabs)' />
+    </Stack>
+
   )
 }
 
