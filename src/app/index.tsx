@@ -1,4 +1,4 @@
-import { useNavigation,Link } from "expo-router";
+import { Link, useNavigation } from "expo-router";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
 
@@ -127,7 +127,18 @@ const Home = () => {
               >
                 <Text style={styles.buttonText}>Sign In</Text>
               </Pressable>
-              <View> <Text>Don't have an account? <Link href="/signUp"><TouchableOpacity className="text-blue-700"><Text>SignUp</Text></TouchableOpacity></Link></Text></View>
+
+              <View>
+                <Text> Don't have an account?</Text>
+                <Link href='/signUp' asChild>
+                  <TouchableOpacity className="text-blue-700">
+
+                    <Text>SignUp</Text>
+
+                  </TouchableOpacity>
+                </Link>
+              </View>
+
             </View>
           </ScrollView>
         </TouchableWithoutFeedback>

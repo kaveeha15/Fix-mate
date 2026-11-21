@@ -1,5 +1,5 @@
 import { Link, useNavigation } from "expo-router";
-import {createUserWithEmailAndPassword} from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
 
 import {
@@ -53,7 +53,7 @@ const SignUp = () => {
                 auth,
                 userCredentials.email.trim(),
                 userCredentials.password,
-               
+
             )
             const user = responce.user
 
@@ -153,7 +153,15 @@ const SignUp = () => {
                             >
                                 <Text style={styles.buttonText}>Sign Up</Text>
                             </Pressable>
-                            <View><Text>Already have an account? <Link href="/"><TouchableOpacity className="text-blue-700"><Text>Login here</Text></TouchableOpacity></Link></Text></View>
+                            <View>
+                                <Text>Already have an account? </Text>
+                                <Link href="/" asChild >
+                                    <TouchableOpacity className="text-blue-700">
+                                        <Text>Login here</Text>
+                                    </TouchableOpacity>
+                                </Link>
+
+                            </View>
                         </View>
                     </ScrollView>
                 </TouchableWithoutFeedback>

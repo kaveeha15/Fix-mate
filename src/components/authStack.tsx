@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 
 const AuthStack = () => {
 
-  const [firebaseUser, setFirebaseUser] = useState(null)
+  const [firebaseUser, setFirebaseUser] = useState<any>(null)
   const router = useRouter()
 
   useEffect(() => {
@@ -28,6 +28,7 @@ const AuthStack = () => {
   return (
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name='index' />
+      <Stack.Screen name='signUp' />
       <Stack.Screen name='(tabs)' />
     </Stack>
 
